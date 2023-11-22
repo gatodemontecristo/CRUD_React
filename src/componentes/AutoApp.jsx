@@ -4,7 +4,7 @@ import { useAutos } from "../hooks/useAutos.js";
 
 export const AutoApp = () => {
     const{handleNewAuto,autosCount,handleDeleteAuto,autos}= useAutos();
-  return (
+  return ( 
     <>
     <h1 class="text-center">SERVICIOS</h1>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -45,6 +45,17 @@ export const AutoApp = () => {
                         <Card key={auto.id}  auto={auto} handleDeleteAuto={handleDeleteAuto} ></Card>
                     ))
                 }
+    
+    <form>
+      <input
+        type="text"
+        placeholder="¿Qué hay que hacer?"
+        className="form-control"
+      />
+      <button type="submit" className="btn btn-outline-primary mt-1">
+        Agregar
+      </button>
+    </form>
 
     </>
   );
