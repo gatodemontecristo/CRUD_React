@@ -5,7 +5,19 @@ const initialState = [
     id:1,
     nombre: 'Auxilio Mecanico',
     descripcion: 'Auto para realizar tareas mecanicas',
-    tipo: 'hogar',
+    tipo: 'salud',
+},
+{
+    id:2,
+    nombre: 'Electricidad',
+    descripcion: 'Auto para realizar mantenimiento electrico',
+    tipo: 'salud',
+},
+{
+  id:3,
+  nombre: 'Chofer de reemplazo',
+  descripcion: 'Servicio de chofer para movilizarse a todas partes.',
+  tipo: 'servicio',
 }
 ];
 const init = () => {

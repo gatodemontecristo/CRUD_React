@@ -1,10 +1,5 @@
     
-    const arregloInicial = [{
-        id:1,
-        nombre: 'Auxilio Mecanico',
-        descripcion: 'Auto para realizar tareas mecanicas',
-        tipo: 'hogar',
-    }];
+    const arregloInicial = [];
 export const autoReducer = (initialState = arregloInicial, action) =>{
 
 
