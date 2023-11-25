@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { Card } from "./Card.jsx";
 import { useAutos } from "../hooks/useAutos.js";
+import { Modal } from "./Modal.jsx";
 
 export const AutoApp = () => {
-  const { handleNewAuto, autosCount, handleDeleteAuto, autos } = useAutos();
+  const { handleNewAuto, autosCount, handleDeleteAuto,handleActualizarAuto, autos } = useAutos();
 
   const [nombreValue, setNombreValue] = useState("");
   const [descValue, setDescValue] = useState("");
   const [tipoValue, setTipoValue] = useState("Mecanico");
+  
 
   const onNombreChange = ({ target }) => {
     setNombreValue(target.value);
@@ -34,6 +36,29 @@ export const AutoApp = () => {
     setNombreValue("");
     setDescValue("");
   };
+
+  const autoSeleccionado = (auto) => {
+    console.log(auto);
+    setNombreEditValue(auto.nombre);
+    setDescEditValue(auto.descripcion);
+    setTipoEditValue(auto.tipo);
+    setIdSeleccionado(auto.id);
+  };
+
+  const [nombreEditValue, setNombreEditValue] = useState("");
+  const [descEditValue, setDescEditValue] = useState("");
+  const [tipoEditValue, setTipoEditValue] = useState("");
+  const [idSeleccionado, setIdSeleccionado] = useState("");
+
+  // const onNombreChange = ({ target }) => {
+  //   setNombreEditValue(target.value);
+  // };
+  // const onDescripcionChange = ({ target }) => {
+  //   setDescEditValue(target.value);
+  // };
+  // const onTipoChange = ({ target }) => {
+  //   setTipoEditValue(target.value);
+  // };
 
   return (
     <>
@@ -79,6 +104,7 @@ export const AutoApp = () => {
               key={auto.id}
               auto={auto}
               handleDeleteAuto={handleDeleteAuto}
+              autoSeleccionado={autoSeleccionado}
             ></Card>
           ))}
         </div>
@@ -94,7 +120,7 @@ export const AutoApp = () => {
           <input
             type="text"
             placeholder="Ingrese nombre ..."
-            className="form-control"
+            class="form-control"
             id="inputNombre"
             onChange={onNombreChange}
             value={nombreValue}
@@ -103,7 +129,7 @@ export const AutoApp = () => {
             Descripción
           </label>
           <textarea
-            className="form-control"
+            class="form-control"
             id="areaDescripcion"
             rows="4"
             cols="50"
@@ -118,11 +144,25 @@ export const AutoApp = () => {
             <option>Hogar</option>
             <option>Servicio</option>
           </select>
-          <button type="submit" className="btn btn-outline-primary mt-1">
+          <button type="submit" class="btn btn-outline-primary mt-1">
             Agregar
           </button>
         </form>
       </div>
+      {/* MODAL */}
+      <Modal 
+         idSeleccionado={idSeleccionado}
+        setNombreEditValue={setNombreEditValue}
+        setDescEditValue={setDescEditValue}
+        setTipoEditValue={setTipoEditValue}
+
+        nombreEditValue={nombreEditValue}
+        descEditValue={descEditValue}
+        tipoEditValue={tipoEditValue}
+          
+       handleActualizarAuto={handleActualizarAuto}
+
+      ></Modal>
     </>
   );
 };

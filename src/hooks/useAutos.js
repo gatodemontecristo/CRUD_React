@@ -5,13 +5,13 @@ const initialState = [
     id:1,
     nombre: 'Auxilio Mecanico',
     descripcion: 'Auto para realizar tareas mecanicas',
-    tipo: 'salud',
+    tipo: 'mecanico',
 },
 {
     id:2,
     nombre: 'Electricidad',
     descripcion: 'Auto para realizar mantenimiento electrico',
-    tipo: 'salud',
+    tipo: 'mecanico',
 },
 {
   id:3,
@@ -40,10 +40,17 @@ export const useAutos = () => {
           payload: id,
         });
       };
+      const handleActualizarAuto = (auto) => {
+        dispatch({
+          type: "actualizar auto",
+          payload: auto,
+        });
+      };
       return {
         handleNewAuto,
         autosCount : autos.length,
         handleDeleteAuto,
+        handleActualizarAuto,
         autos,
       };
 }
