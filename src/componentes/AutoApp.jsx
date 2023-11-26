@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Card } from "./Card.jsx";
 import { useAutos } from "../hooks/useAutos.js";
-import { Modal } from "./Modal.jsx";
+import MyModal from "./MyModal.jsx";
 
 export const AutoApp = () => {
   const { handleNewAuto, autosCount, handleDeleteAuto,handleActualizarAuto, autos } = useAutos();
 
   const [nombreValue, setNombreValue] = useState("");
   const [descValue, setDescValue] = useState("");
-  const [tipoValue, setTipoValue] = useState("Mecanico");
+  const [tipoValue, setTipoValue] = useState("mecanico");
   
 
   const onNombreChange = ({ target }) => {
@@ -24,7 +24,7 @@ export const AutoApp = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    if (nombreValue.trim().length <= 1) return;
+    if (nombreValue.trim().length <= 1 || descValue.trim().length <= 1) return;
 
     const todo = {
       id: new Date().getTime(),
@@ -59,6 +59,26 @@ export const AutoApp = () => {
   // const onTipoChange = ({ target }) => {
   //   setTipoEditValue(target.value);
   // };
+  
+  const [show, setShow] = useState(false);
+  const handleClose = () => {
+    setShow(false);
+  }
+  const handleSave = (event) => {
+    event.preventDefault();
+    if (nombreEditValue.trim().length <= 1) return;
+
+    const todo = {
+      id: idSeleccionado,
+      nombre: nombreEditValue,
+      descripcion: descEditValue,
+      tipo: tipoEditValue,
+    };
+    handleActualizarAuto(todo);
+
+    setShow(false);
+  }
+  const handleShow = () => setShow(true);
 
   return (
     <>
@@ -96,7 +116,7 @@ export const AutoApp = () => {
       </nav>
       <div class="d-flex flex-row">
         <div
-          class="d-flex flex-row justify-content-center w-75 pt-5"
+          class="d-flex flex-wrap flex-row justify-content-center w-75 pt-5"
           style={{ with: "70%" }}
         >
           {autos.map((auto) => (
@@ -105,6 +125,7 @@ export const AutoApp = () => {
               auto={auto}
               handleDeleteAuto={handleDeleteAuto}
               autoSeleccionado={autoSeleccionado}
+              handleShow={handleShow}
             ></Card>
           ))}
         </div>
@@ -112,7 +133,8 @@ export const AutoApp = () => {
         <form
           style={{ with: "30%" }}
           onSubmit={(event) => onSubmit(event)}
-          class="p-5 w-25"
+          class="p-5 w-25 needs-validation"
+          novalidate
         >
           <label for="inputNombre" class="form-label">
             Nombre
@@ -124,7 +146,11 @@ export const AutoApp = () => {
             id="inputNombre"
             onChange={onNombreChange}
             value={nombreValue}
+            required
           />
+          <div class="invalid-feedback">
+      Please select a valid state.
+    </div>
           <label for="areaDescripcion" class="form-label">
             Descripción
           </label>
@@ -136,33 +162,41 @@ export const AutoApp = () => {
             placeholder="Ingrese descripción ..."
             onChange={onDescripcionChange}
             value={descValue}
+            required
           ></textarea>
+           <div class="invalid-feedback">
+      Please select a valid state.
+    </div>
           <label for="selectTipo">Tipo</label>
           <select onChange={onTipoChange} class="form-control" id="selectTipo">
-            <option>Mecanico</option>
-            <option>Salud</option>
-            <option>Hogar</option>
-            <option>Servicio</option>
+          <option value="mecanico">Mecanico</option>
+            <option value="salud">Salud</option>
+            <option value="hogar">Hogar</option>
+            <option value="servicio">Servicio</option>
           </select>
-          <button type="submit" class="btn btn-outline-primary mt-1">
+          <button type="submit" class="btn btn-outline-primary mt-1 w-100">
             Agregar
           </button>
         </form>
       </div>
       {/* MODAL */}
-      <Modal 
-         idSeleccionado={idSeleccionado}
-        setNombreEditValue={setNombreEditValue}
-        setDescEditValue={setDescEditValue}
-        setTipoEditValue={setTipoEditValue}
+   
 
-        nombreEditValue={nombreEditValue}
-        descEditValue={descEditValue}
-        tipoEditValue={tipoEditValue}
-          
-       handleActualizarAuto={handleActualizarAuto}
 
-      ></Modal>
+
+      <MyModal
+           setNombreEditValue={setNombreEditValue}
+           setDescEditValue={setDescEditValue}
+           setTipoEditValue={setTipoEditValue}
+   
+           nombreEditValue={nombreEditValue}
+           descEditValue={descEditValue}
+           tipoEditValue={tipoEditValue}
+             
+        handleClose={handleClose}
+        show={show}
+        handleSave={handleSave}
+      />
     </>
   );
 };

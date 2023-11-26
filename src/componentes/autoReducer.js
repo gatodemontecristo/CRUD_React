@@ -12,7 +12,6 @@ export const autoReducer = (initialState = arregloInicial, action) =>{
             return initialState.map(todo=>{
                 console.log(action.payload.id);
                 if(todo.id === action.payload.id){
-                    console.log("LLEGO ...");
                     console.log(action.payload);
                     return{
                             ...todo,
