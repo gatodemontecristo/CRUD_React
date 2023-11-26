@@ -2,28 +2,50 @@ import React, { useState } from "react";
 import { Card } from "./Card.jsx";
 import { useAutos } from "../hooks/useAutos.js";
 import MyModal from "./MyModal.jsx";
+import { useAgregar } from "../hooks/useAgregar.js";
+import { useEditar } from "../hooks/useEditar.js";
+import { MyForm } from "./MyForm.jsx";
 
 export const AutoApp = () => {
-  const { handleNewAuto, autosCount, handleDeleteAuto,handleActualizarAuto, autos } = useAutos();
+  const {
+    autosCount,
+    handleDeleteAuto, 
+    handleNewAuto,
+    handleActualizarAuto,
+    autos,
+  } = useAutos();
 
-  const [nombreValue, setNombreValue] = useState("");
-  const [descValue, setDescValue] = useState("");
-  const [tipoValue, setTipoValue] = useState("mecanico");
-  
+  const {
+    onNombreChange,
+    onDescripcionChange,
+    onTipoChange,
+    nombreValue,
+    descValue,
+    tipoValue,
+    setNombreValue,
+    setDescValue,
+  } = useAgregar();
 
-  const onNombreChange = ({ target }) => {
-    setNombreValue(target.value);
-  };
-  const onDescripcionChange = ({ target }) => {
-    setDescValue(target.value);
-  };
-  const onTipoChange = ({ target }) => {
-    console.log(target.value);
-    setTipoValue(target.value);
-  };
+  const {
+    autoSeleccionado,
+    handleShow,
+    setNombreEditValue,
+    setDescEditValue,
+    setTipoEditValue,
+    idSeleccionado,
+    nombreEditValue,
+    descEditValue,
+    tipoEditValue,
+    handleClose,
+    show,
+    setShow,
+  } = useEditar();
 
-  const onSubmit = (event) => {
+  const onSubmitNew = (event) => {
     event.preventDefault();
+
+
+
     if (nombreValue.trim().length <= 1 || descValue.trim().length <= 1) return;
 
     const todo = {
@@ -37,33 +59,6 @@ export const AutoApp = () => {
     setDescValue("");
   };
 
-  const autoSeleccionado = (auto) => {
-    console.log(auto);
-    setNombreEditValue(auto.nombre);
-    setDescEditValue(auto.descripcion);
-    setTipoEditValue(auto.tipo);
-    setIdSeleccionado(auto.id);
-  };
-
-  const [nombreEditValue, setNombreEditValue] = useState("");
-  const [descEditValue, setDescEditValue] = useState("");
-  const [tipoEditValue, setTipoEditValue] = useState("");
-  const [idSeleccionado, setIdSeleccionado] = useState("");
-
-  // const onNombreChange = ({ target }) => {
-  //   setNombreEditValue(target.value);
-  // };
-  // const onDescripcionChange = ({ target }) => {
-  //   setDescEditValue(target.value);
-  // };
-  // const onTipoChange = ({ target }) => {
-  //   setTipoEditValue(target.value);
-  // };
-  
-  const [show, setShow] = useState(false);
-  const handleClose = () => {
-    setShow(false);
-  }
   const handleSave = (event) => {
     event.preventDefault();
     if (nombreEditValue.trim().length <= 1) return;
@@ -77,12 +72,11 @@ export const AutoApp = () => {
     handleActualizarAuto(todo);
 
     setShow(false);
-  }
-  const handleShow = () => setShow(true);
+  };
 
   return (
     <>
-      <h1 class="text-center">SERVICIOS</h1>
+      <h1 class="text-center">SERVICIOS ({autosCount})</h1>
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
           <button
@@ -129,8 +123,20 @@ export const AutoApp = () => {
             ></Card>
           ))}
         </div>
+          <MyForm
+          onNombreChange={onNombreChange}
+          nombreValue={nombreValue}
+          onDescripcionChange={onDescripcionChange}
+          descValue={descValue}
+          onTipoChange={onTipoChange}
+          handleNewAuto={handleNewAuto}
+          tipoValue={tipoValue}
+          setNombreValue={setNombreValue}
+          setDescValue={setDescValue}
+          ></MyForm>
 
-        <form
+
+        {/* <form
           style={{ with: "30%" }}
           onSubmit={(event) => onSubmit(event)}
           class="p-5 w-25 needs-validation"
@@ -148,9 +154,7 @@ export const AutoApp = () => {
             value={nombreValue}
             required
           />
-          <div class="invalid-feedback">
-      Please select a valid state.
-    </div>
+          <div class="invalid-feedback">Please select a valid state.</div>
           <label for="areaDescripcion" class="form-label">
             Descripción
           </label>
@@ -161,15 +165,13 @@ export const AutoApp = () => {
             cols="50"
             placeholder="Ingrese descripción ..."
             onChange={onDescripcionChange}
-            value={descValue}
+            value={onDescripcionChange}
             required
           ></textarea>
-           <div class="invalid-feedback">
-      Please select a valid state.
-    </div>
+          <div class="invalid-feedback">Please select a valid state.</div>
           <label for="selectTipo">Tipo</label>
           <select onChange={onTipoChange} class="form-control" id="selectTipo">
-          <option value="mecanico">Mecanico</option>
+            <option value="mecanico">Mecanico</option>
             <option value="salud">Salud</option>
             <option value="hogar">Hogar</option>
             <option value="servicio">Servicio</option>
@@ -177,26 +179,23 @@ export const AutoApp = () => {
           <button type="submit" class="btn btn-outline-primary mt-1 w-100">
             Agregar
           </button>
-        </form>
+        </form> */}
       </div>
+     
       {/* MODAL */}
-   
-
-
 
       <MyModal
-           setNombreEditValue={setNombreEditValue}
-           setDescEditValue={setDescEditValue}
-           setTipoEditValue={setTipoEditValue}
-   
-           nombreEditValue={nombreEditValue}
-           descEditValue={descEditValue}
-           tipoEditValue={tipoEditValue}
-             
+        setNombreEditValue={setNombreEditValue}
+        setDescEditValue={setDescEditValue}
+        setTipoEditValue={setTipoEditValue}
+        nombreEditValue={nombreEditValue}
+        descEditValue={descEditValue}
+        tipoEditValue={tipoEditValue}
         handleClose={handleClose}
         show={show}
         handleSave={handleSave}
       />
+
     </>
   );
 };

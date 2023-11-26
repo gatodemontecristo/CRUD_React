@@ -10,9 +10,10 @@ export const autoReducer = (initialState = arregloInicial, action) =>{
             return initialState.filter(todo=>todo.id !== action.payload);
         case 'actualizar auto':
             return initialState.map(todo=>{
-                console.log(action.payload.id);
+               
                 if(todo.id === action.payload.id){
                     console.log(action.payload);
+                    console.log("ACTUALIZO");
                     return{
                             ...todo,
                             nombre:action.payload.nombre,
