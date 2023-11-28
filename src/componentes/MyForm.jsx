@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useAgregar } from '../hooks/useAgregar';
 
 export const MyForm = ({onNombreChange,nombreValue,onDescripcionChange,descValue,onTipoChange,handleNewAuto,tipoValue,setNombreValue,setDescValue}) => {
 
