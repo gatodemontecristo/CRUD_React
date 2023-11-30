@@ -7,11 +7,16 @@ import { useEditar } from "../hooks/useEditar.js";
 import { MyForm } from "./MyForm.jsx";
 
 export const AutoApp = () => {
+  const [filtrado, setFiltrado] = useState(false);
+  const [seccionFiltro, setSeccionFiltro] = useState("");
+
   const {
     autosCount,
-    handleDeleteAuto, 
+    handleDeleteAuto,
     handleNewAuto,
     handleActualizarAuto,
+    handleFiltroAuto,
+    handleFiltroNada,
     autos,
   } = useAutos();
 
@@ -40,24 +45,6 @@ export const AutoApp = () => {
     show,
     setShow,
   } = useEditar();
-
-  const onSubmitNew = (event) => {
-    event.preventDefault();
-
-
-
-    if (nombreValue.trim().length <= 1 || descValue.trim().length <= 1) return;
-
-    const todo = {
-      id: new Date().getTime(),
-      nombre: nombreValue,
-      descripcion: descValue,
-      tipo: tipoValue.toLowerCase(),
-    };
-    handleNewAuto(todo);
-    setNombreValue("");
-    setDescValue("");
-  };
 
   const handleSave = (event) => {
     event.preventDefault();
@@ -92,18 +79,49 @@ export const AutoApp = () => {
           </button>
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-link active" aria-current="page" href="#">
+              {/* <a class="nav-link active" aria-current="page" href="#">
                 Todos
-              </a>
-              <a class="nav-link" href="#">
-                Autos
-              </a>
-              <a class="nav-link" href="#">
-                Salud
-              </a>
-              <a class="nav-link" href="#">
+              </a> */}
+              <button
+                class="btn btn-light"
+                onClick={() => {
+                  setSeccionFiltro("servicio");
+                  setFiltrado(true);
+                }}
+              >
+                Servicio
+              </button>
+              <button
+                class="btn btn-light"
+                onClick={() => {
+                  setSeccionFiltro("hogar");
+                  setFiltrado(true);
+                }}
+              >
                 Hogar
-              </a>
+              </button>
+              <button
+                class="btn btn-light"
+                onClick={() => {
+                  setSeccionFiltro("salud");
+                  setFiltrado(true);
+                }}
+              >
+                Salud
+              </button>
+              <button
+                class="btn btn-light"
+                onClick={() => {
+                  setSeccionFiltro("mecanico");
+                  setFiltrado(true);
+                }}
+              >
+                Mecanico
+              </button>
+              <button class="btn btn-light" onClick={() => setFiltrado(false)}>
+                Todos
+              </button>
+             
             </div>
           </div>
         </div>
@@ -113,7 +131,7 @@ export const AutoApp = () => {
           class="d-flex flex-wrap flex-row justify-content-center w-75 pt-5"
           style={{ with: "70%" }}
         >
-          {autos.map((auto) => (
+          {/* {autos.map((auto) => (
             <Card
               key={auto.id}
               auto={auto}
@@ -121,9 +139,31 @@ export const AutoApp = () => {
               autoSeleccionado={autoSeleccionado}
               handleShow={handleShow}
             ></Card>
-          ))}
+          ))} */}
+
+          {filtrado
+            ? autos
+                .filter((auto) => auto.tipo === seccionFiltro)
+                .map((auto) => (
+                  <Card
+                    key={auto.id}
+                    auto={auto}
+                    handleDeleteAuto={handleDeleteAuto}
+                    autoSeleccionado={autoSeleccionado}
+                    handleShow={handleShow}
+                  ></Card>
+                ))
+            : autos.map((auto) => (
+                <Card
+                  key={auto.id}
+                  auto={auto}
+                  handleDeleteAuto={handleDeleteAuto}
+                  autoSeleccionado={autoSeleccionado}
+                  handleShow={handleShow}
+                ></Card>
+              ))}
         </div>
-          <MyForm
+        <MyForm
           onNombreChange={onNombreChange}
           nombreValue={nombreValue}
           onDescripcionChange={onDescripcionChange}
@@ -133,8 +173,7 @@ export const AutoApp = () => {
           tipoValue={tipoValue}
           setNombreValue={setNombreValue}
           setDescValue={setDescValue}
-          ></MyForm>
-
+        ></MyForm>
 
         {/* <form
           style={{ with: "30%" }}
@@ -181,7 +220,7 @@ export const AutoApp = () => {
           </button>
         </form> */}
       </div>
-     
+
       {/* MODAL */}
 
       <MyModal
@@ -195,7 +234,6 @@ export const AutoApp = () => {
         show={show}
         handleSave={handleSave}
       />
-
     </>
   );
 };

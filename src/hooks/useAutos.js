@@ -46,11 +46,25 @@ export const useAutos = () => {
           payload: auto,
         });
       };
+      const handleFiltroAuto = (auto) => {
+        dispatch({
+          type: "agregar filtro",
+          payload: auto,
+        });
+      };
+      const handleFiltroNada = () => {
+        dispatch({
+          type: "sin filtro",
+          payload: [],
+        });
+      };
       return {
         handleNewAuto,
         autosCount : autos.length,
         handleDeleteAuto,
         handleActualizarAuto,
+        handleFiltroAuto,
+        handleFiltroNada,
         autos,
       };
 }

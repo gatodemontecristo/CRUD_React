@@ -15,7 +15,6 @@ export const MyForm = ({onNombreChange,nombreValue,onDescripcionChange,descValue
       event.preventDefault();
       event.stopPropagation();
       setValidated(true);
-      console.log("LLEGO A LA PARTE 01");
     }else{
       event.preventDefault();
       if (nombreValue.trim().length <= 1 || descValue.trim().length <= 1) return;
@@ -30,7 +29,6 @@ export const MyForm = ({onNombreChange,nombreValue,onDescripcionChange,descValue
       setNombreValue("");
       setDescValue("");
       setValidated(false);
-      console.log("LLEGO A LA PARTE 02");
     }
 
     
