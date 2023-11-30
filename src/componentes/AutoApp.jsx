@@ -9,7 +9,13 @@ import { MyForm } from "./MyForm.jsx";
 export const AutoApp = () => {
   const [filtrado, setFiltrado] = useState(false);
   const [seccionFiltro, setSeccionFiltro] = useState("");
-
+  const [boton, setboton] = useState({
+    botonServicio: false,
+    botonHogar: false,
+    botonSalud: false,
+    botonMecanico: false,
+    botonTodo: true,
+  });
   const {
     autosCount,
     handleDeleteAuto,
@@ -83,45 +89,84 @@ export const AutoApp = () => {
                 Todos
               </a> */}
               <button
-                class="btn btn-light"
+                class={`btn btn-light me-2 ${boton.botonServicio ? "active" : ""}`}
                 onClick={() => {
                   setSeccionFiltro("servicio");
                   setFiltrado(true);
+                  setboton({
+                    botonServicio: true,
+                    botonHogar: false,
+                    botonSalud: false,
+                    botonMecanico: false,
+                    botonTodo: false,
+                  });
                 }}
               >
                 Servicio
               </button>
               <button
-                class="btn btn-light"
+                class={`btn btn-light me-2 ${boton.botonHogar ? "active" : ""}`}
                 onClick={() => {
                   setSeccionFiltro("hogar");
                   setFiltrado(true);
+                  setboton({
+                    botonServicio: false,
+                    botonHogar: true,
+                    botonSalud: false,
+                    botonMecanico: false,
+                    botonTodo: false,
+                  });
                 }}
               >
                 Hogar
               </button>
               <button
-                class="btn btn-light"
+                 class={`btn btn-light me-2 ${boton.botonSalud ? "active" : ""}`}
                 onClick={() => {
                   setSeccionFiltro("salud");
                   setFiltrado(true);
+                  setboton({
+                    botonServicio: false,
+                    botonHogar: false,
+                    botonSalud: true,
+                    botonMecanico: false,
+                    botonTodo: false,
+                  });
                 }}
               >
                 Salud
               </button>
               <button
-                class="btn btn-light"
+             class={`btn btn-light me-2 ${boton.botonMecanico ? "active" : ""}`}
                 onClick={() => {
                   setSeccionFiltro("mecanico");
                   setFiltrado(true);
+                  setboton({
+                    botonServicio: false,
+                    botonHogar: false,
+                    botonSalud: false,
+                    botonMecanico: true,
+                    botonTodo: false,
+                  });
                 }}
               >
                 Mecanico
               </button>
-              <button class="btn btn-light" onClick={() => setFiltrado(false)}>
+              <button
+                class={`btn btn-light me-2 ${boton.botonTodo ? "active" : ""}`}
+                onClick={() => {
+                  setFiltrado(false);
+                  setboton({
+                    botonServicio: false,
+                    botonHogar: false,
+                    botonSalud: false,
+                    botonMecanico: false,
+                    botonTodo: true,
+                  });
+                }}
+              >
                 Todos
               </button>
-             
             </div>
           </div>
         </div>
