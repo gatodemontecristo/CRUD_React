@@ -1,13 +1,31 @@
 
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-export const MyForm = ({onNombreChange,nombreValue,onDescripcionChange,descValue,onTipoChange,handleNewAuto,tipoValue,setNombreValue,setDescValue}) => {
+export const MyForm = ({onNombreChange,nombreValue,onDescripcionChange,descValue,onTipoChange,handleNewAuto,tipoValue,setNombreValue,setDescValue,mostrarTodo}) => {
 
 
     const [validated, setValidated] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+    const [mensaje, setMensaje] = useState("");
+   
+
+    useEffect(() => {
+      let timeoutId;
+      if (showAlert) {
+        
+        timeoutId = setTimeout(() => {
+          setShowAlert(false);
+        }, 4000);
+      }
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }, [showAlert]);
+
+
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -17,7 +35,7 @@ export const MyForm = ({onNombreChange,nombreValue,onDescripcionChange,descValue
       setValidated(true);
     }else{
       event.preventDefault();
-      if (nombreValue.trim().length <= 1 || descValue.trim().length <= 1) return;
+      if (nombreValue.trim().length <= 0 || descValue.trim().length <= 0) return;
   
       const todo = {
         id: new Date().getTime(),
@@ -25,10 +43,13 @@ export const MyForm = ({onNombreChange,nombreValue,onDescripcionChange,descValue
         descripcion: descValue,
         tipo: tipoValue.toLowerCase(),
       };
+      setMensaje(nombreValue);
       handleNewAuto(todo);
       setNombreValue("");
       setDescValue("");
       setValidated(false);
+      setShowAlert(true);
+      mostrarTodo();
     }
 
     
@@ -36,8 +57,8 @@ export const MyForm = ({onNombreChange,nombreValue,onDescripcionChange,descValue
   };
 
   return (
-    <Form noValidate validated={validated} onSubmit={handleSubmit}
-    className="p-5 w-25 needs-validation">
+    <Form noValidate validated={validated} onSubmit={handleSubmit}  
+    className="p-5 w-25 mt-5 needs-validation" style={{ borderLeft: '2px solid #8080805e', height:'100%'}}>
      
           <Form.Label>Nombre</Form.Label>
           <Form.Control
@@ -76,6 +97,11 @@ export const MyForm = ({onNombreChange,nombreValue,onDescripcionChange,descValue
          </Form.Select>
        
       <Button type="submit" className="mt-3 w-100">Agregar</Button>
+      
+      <div class={`alert alert-info mt-3 ${showAlert ? "d-block" : "d-none"}`} role="alert">
+      
+          Se registró el carro <strong>{mensaje}</strong> con éxito.
+        </div>
     </Form>
   )
 }

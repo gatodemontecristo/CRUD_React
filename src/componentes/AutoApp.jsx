@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "./Card.jsx";
 import { useAutos } from "../hooks/useAutos.js";
 import MyModal from "./MyModal.jsx";
@@ -9,6 +9,21 @@ import { MyForm } from "./MyForm.jsx";
 export const AutoApp = () => {
   const [filtrado, setFiltrado] = useState(false);
   const [seccionFiltro, setSeccionFiltro] = useState("");
+  const [showAlertRemove, setShowAlertRemove] = useState(false);
+  const [autoRemover, setAutoRemover] = useState("");
+
+  useEffect(() => {
+    let timeoutId;
+    if (showAlertRemove) {
+      timeoutId = setTimeout(() => {
+        setShowAlertRemove(false);
+      }, 4000);
+    }
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [showAlertRemove]);
+
   const [boton, setboton] = useState({
     botonServicio: false,
     botonHogar: false,
@@ -21,8 +36,6 @@ export const AutoApp = () => {
     handleDeleteAuto,
     handleNewAuto,
     handleActualizarAuto,
-    handleFiltroAuto,
-    handleFiltroNada,
     autos,
   } = useAutos();
 
@@ -66,7 +79,16 @@ export const AutoApp = () => {
 
     setShow(false);
   };
-
+  const mostrarTodo = () => {
+    setFiltrado(false);
+    setboton({
+      botonServicio: false,
+      botonHogar: false,
+      botonSalud: false,
+      botonMecanico: false,
+      botonTodo: true,
+    });
+  };
   return (
     <>
       <h1 class="text-center">SERVICIOS ({autosCount})</h1>
@@ -89,7 +111,9 @@ export const AutoApp = () => {
                 Todos
               </a> */}
               <button
-                class={`btn btn-light me-2 ${boton.botonServicio ? "active" : ""}`}
+                class={`btn btn-light me-2 ${
+                  boton.botonServicio ? "active" : ""
+                }`}
                 onClick={() => {
                   setSeccionFiltro("servicio");
                   setFiltrado(true);
@@ -121,7 +145,7 @@ export const AutoApp = () => {
                 Hogar
               </button>
               <button
-                 class={`btn btn-light me-2 ${boton.botonSalud ? "active" : ""}`}
+                class={`btn btn-light me-2 ${boton.botonSalud ? "active" : ""}`}
                 onClick={() => {
                   setSeccionFiltro("salud");
                   setFiltrado(true);
@@ -137,7 +161,9 @@ export const AutoApp = () => {
                 Salud
               </button>
               <button
-             class={`btn btn-light me-2 ${boton.botonMecanico ? "active" : ""}`}
+                class={`btn btn-light me-2 ${
+                  boton.botonMecanico ? "active" : ""
+                }`}
                 onClick={() => {
                   setSeccionFiltro("mecanico");
                   setFiltrado(true);
@@ -154,16 +180,7 @@ export const AutoApp = () => {
               </button>
               <button
                 class={`btn btn-light me-2 ${boton.botonTodo ? "active" : ""}`}
-                onClick={() => {
-                  setFiltrado(false);
-                  setboton({
-                    botonServicio: false,
-                    botonHogar: false,
-                    botonSalud: false,
-                    botonMecanico: false,
-                    botonTodo: true,
-                  });
-                }}
+                onClick={mostrarTodo}
               >
                 Todos
               </button>
@@ -171,43 +188,48 @@ export const AutoApp = () => {
           </div>
         </div>
       </nav>
-      <div class="d-flex flex-row">
-        <div
-          class="d-flex flex-wrap flex-row justify-content-center w-75 pt-5"
-          style={{ with: "70%" }}
-        >
-          {/* {autos.map((auto) => (
-            <Card
-              key={auto.id}
-              auto={auto}
-              handleDeleteAuto={handleDeleteAuto}
-              autoSeleccionado={autoSeleccionado}
-              handleShow={handleShow}
-            ></Card>
-          ))} */}
 
-          {filtrado
-            ? autos
-                .filter((auto) => auto.tipo === seccionFiltro)
-                .map((auto) => (
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-column w-75">
+          <div
+            class={`alert alert-danger mt-3 ms-5 me-5 ${
+              showAlertRemove ? "d-block" : "d-none"
+            }`}
+            role="alert"
+          >
+            Se eliminó el carro <strong>{autoRemover}</strong> con éxito.
+          </div>
+          <div
+            class="d-flex flex-wrap flex-row justify-content-center w-100 pt-2"
+          >
+            {filtrado
+              ? autos
+                  .filter((auto) => auto.tipo === seccionFiltro)
+                  .map((auto) => (
+                    <Card
+                      key={auto.id}
+                      auto={auto}
+                      handleDeleteAuto={handleDeleteAuto}
+                      autoSeleccionado={autoSeleccionado}
+                      handleShow={handleShow}
+                      setAutoRemover={setAutoRemover}
+                      setShowAlertRemove={setShowAlertRemove}
+                    ></Card>
+                  ))
+              : autos.map((auto) => (
                   <Card
                     key={auto.id}
                     auto={auto}
                     handleDeleteAuto={handleDeleteAuto}
                     autoSeleccionado={autoSeleccionado}
                     handleShow={handleShow}
+                    setAutoRemover={setAutoRemover}
+                    setShowAlertRemove={setShowAlertRemove}
                   ></Card>
-                ))
-            : autos.map((auto) => (
-                <Card
-                  key={auto.id}
-                  auto={auto}
-                  handleDeleteAuto={handleDeleteAuto}
-                  autoSeleccionado={autoSeleccionado}
-                  handleShow={handleShow}
-                ></Card>
-              ))}
+                ))}
+          </div>
         </div>
+
         <MyForm
           onNombreChange={onNombreChange}
           nombreValue={nombreValue}
@@ -218,52 +240,8 @@ export const AutoApp = () => {
           tipoValue={tipoValue}
           setNombreValue={setNombreValue}
           setDescValue={setDescValue}
+          mostrarTodo={mostrarTodo}
         ></MyForm>
-
-        {/* <form
-          style={{ with: "30%" }}
-          onSubmit={(event) => onSubmit(event)}
-          class="p-5 w-25 needs-validation"
-          novalidate
-        >
-          <label for="inputNombre" class="form-label">
-            Nombre
-          </label>
-          <input
-            type="text"
-            placeholder="Ingrese nombre ..."
-            class="form-control"
-            id="inputNombre"
-            onChange={onNombreChange}
-            value={nombreValue}
-            required
-          />
-          <div class="invalid-feedback">Please select a valid state.</div>
-          <label for="areaDescripcion" class="form-label">
-            Descripción
-          </label>
-          <textarea
-            class="form-control"
-            id="areaDescripcion"
-            rows="4"
-            cols="50"
-            placeholder="Ingrese descripción ..."
-            onChange={onDescripcionChange}
-            value={onDescripcionChange}
-            required
-          ></textarea>
-          <div class="invalid-feedback">Please select a valid state.</div>
-          <label for="selectTipo">Tipo</label>
-          <select onChange={onTipoChange} class="form-control" id="selectTipo">
-            <option value="mecanico">Mecanico</option>
-            <option value="salud">Salud</option>
-            <option value="hogar">Hogar</option>
-            <option value="servicio">Servicio</option>
-          </select>
-          <button type="submit" class="btn btn-outline-primary mt-1 w-100">
-            Agregar
-          </button>
-        </form> */}
       </div>
 
       {/* MODAL */}
