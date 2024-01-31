@@ -25,9 +25,8 @@
 
 ### Captura
 
-  <div align="center" display="flex">
-       <img src="/screenshotAuto.png" alt="Sección de configuración" width="70%" >
-  </div>
+![528shots_so](https://github.com/gatodemontecristo/CRUD_React/assets/61488294/a19bfb48-085c-447a-8b08-370a8da42e36)
+
 
 
 # React + Vite
